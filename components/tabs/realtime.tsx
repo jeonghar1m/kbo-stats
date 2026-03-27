@@ -6,6 +6,7 @@ import { z } from "zod";
 import { GameCard } from "@/components/game-card";
 import { GameCardSkeleton } from "@/components/game-card-skeleton";
 import { DatePicker } from "@/components/date-picker";
+import { getTeamColor } from "@/lib/team-colors";
 
 const gameSchema = z.object({
   games: z.array(
@@ -26,6 +27,150 @@ const gameSchema = z.object({
   overallSummary: z.string(),
 });
 
+type RealtimeGame = NonNullable<z.infer<typeof gameSchema>["games"]>[number];
+
+const STATUS_LABEL: Record<string, string> = {
+  SCHEDULED: "예정",
+  IN_PROGRESS: "진행 중",
+  FINISHED: "종료",
+  CANCELED: "취소",
+};
+
+function GameDetail({
+  game,
+  date,
+  onBack,
+}: {
+  game: RealtimeGame;
+  date: string;
+  onBack: () => void;
+}) {
+  const homeColor = getTeamColor(game.homeTeam ?? "");
+  const awayColor = getTeamColor(game.awayTeam ?? "");
+  const isFinished = game.status === "FINISHED";
+  const homeWin = isFinished && (game.homeScore ?? 0) > (game.awayScore ?? 0);
+  const awayWin = isFinished && (game.awayScore ?? 0) > (game.homeScore ?? 0);
+
+  return (
+    <div className="space-y-4">
+      <button
+        type="button"
+        onClick={onBack}
+        className="flex items-center gap-1.5 text-sm text-zinc-500 hover:text-zinc-800 dark:text-zinc-400 dark:hover:text-zinc-200 transition-colors"
+      >
+        ← 목록으로
+      </button>
+
+      {/* Header */}
+      <div className="rounded-xl border border-zinc-200 bg-white shadow-sm overflow-hidden dark:border-zinc-800 dark:bg-zinc-900">
+        <div className="flex items-center justify-between px-4 py-2 bg-zinc-50 dark:bg-zinc-800/50 text-xs text-zinc-500 dark:text-zinc-400">
+          <span>{game.stadium ?? ""}</span>
+          <span className="flex items-center gap-1.5">
+            {game.status === "IN_PROGRESS" && (
+              <span className="relative flex h-2 w-2">
+                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-red-400 opacity-75" />
+                <span className="relative inline-flex rounded-full h-2 w-2 bg-red-500" />
+              </span>
+            )}
+            {STATUS_LABEL[game.status ?? ""] ?? game.status}
+          </span>
+        </div>
+
+        <div className="p-6 space-y-4">
+          <p className="text-xs text-zinc-400 dark:text-zinc-500">{date}</p>
+
+          {/* Score display */}
+          <div className="flex items-center justify-between gap-4">
+            {/* Away */}
+            <div className="flex-1 flex flex-col items-center gap-2">
+              <div
+                className="w-2 h-12 rounded-full"
+                style={{ backgroundColor: awayColor.primary }}
+              />
+              <span
+                className={`text-xl font-bold ${
+                  awayWin
+                    ? "text-zinc-900 dark:text-white"
+                    : "text-zinc-500 dark:text-zinc-400"
+                }`}
+              >
+                {game.awayTeam}
+              </span>
+              {game.awayPitcher?.trim() && (
+                <span className="text-xs text-zinc-400 dark:text-zinc-500">
+                  {game.awayPitcher.trim()}
+                </span>
+              )}
+            </div>
+
+            {/* Scores */}
+            <div className="flex items-center gap-4">
+              <span
+                className={`text-5xl font-mono font-bold tabular-nums ${
+                  awayWin
+                    ? "text-zinc-900 dark:text-white"
+                    : "text-zinc-400 dark:text-zinc-500"
+                }`}
+              >
+                {game.status === "SCHEDULED" ? "-" : game.awayScore ?? 0}
+              </span>
+              <span className="text-2xl text-zinc-300 dark:text-zinc-600 font-light">:</span>
+              <span
+                className={`text-5xl font-mono font-bold tabular-nums ${
+                  homeWin
+                    ? "text-zinc-900 dark:text-white"
+                    : "text-zinc-400 dark:text-zinc-500"
+                }`}
+              >
+                {game.status === "SCHEDULED" ? "-" : game.homeScore ?? 0}
+              </span>
+            </div>
+
+            {/* Home */}
+            <div className="flex-1 flex flex-col items-center gap-2">
+              <div
+                className="w-2 h-12 rounded-full"
+                style={{ backgroundColor: homeColor.primary }}
+              />
+              <span
+                className={`text-xl font-bold ${
+                  homeWin
+                    ? "text-zinc-900 dark:text-white"
+                    : "text-zinc-500 dark:text-zinc-400"
+                }`}
+              >
+                {game.homeTeam}
+              </span>
+              {game.homePitcher?.trim() && (
+                <span className="text-xs text-zinc-400 dark:text-zinc-500">
+                  {game.homePitcher.trim()}
+                </span>
+              )}
+            </div>
+          </div>
+
+          {/* Start time */}
+          {game.startTime && (
+            <p className="text-center text-sm text-zinc-400 dark:text-zinc-500">
+              {game.startTime}
+            </p>
+          )}
+        </div>
+      </div>
+
+      {/* AI Summary */}
+      {game.summary && (
+        <div className="rounded-xl bg-zinc-100 dark:bg-zinc-800 px-5 py-4 text-sm text-zinc-700 dark:text-zinc-300">
+          <p className="font-medium text-zinc-900 dark:text-white mb-2">
+            💬 AI 경기 분석
+          </p>
+          <p className="leading-relaxed">{game.summary}</p>
+        </div>
+      )}
+    </div>
+  );
+}
+
 function getToday() {
   return new Date(
     new Date().toLocaleString("en-US", { timeZone: "Asia/Seoul" })
@@ -36,10 +181,21 @@ function getToday() {
 
 export function Realtime() {
   const [date, setDate] = useState(getToday());
+  const [selectedGame, setSelectedGame] = useState<RealtimeGame | null>(null);
   const { object, submit, isLoading, error } = useObject({
     api: "/api/games",
     schema: gameSchema,
   });
+
+  if (selectedGame) {
+    return (
+      <GameDetail
+        game={selectedGame}
+        date={date}
+        onBack={() => setSelectedGame(null)}
+      />
+    );
+  }
 
   return (
     <div className="space-y-4">
@@ -105,6 +261,7 @@ export function Realtime() {
                       broadcastServices: [],
                       season: 0,
                     }}
+                    onClick={() => setSelectedGame(game)}
                   />
                   {game.summary && (
                     <p className="text-xs text-zinc-500 dark:text-zinc-400 px-2">

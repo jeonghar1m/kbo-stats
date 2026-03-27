@@ -8,7 +8,7 @@ const STATUS_LABEL: Record<Game["status"], string> = {
   CANCELED: "취소",
 };
 
-export function GameCard({ game }: { game: Game }) {
+export function GameCard({ game, onClick }: { game: Game; onClick?: () => void }) {
   const homeColor = getTeamColor(game.homeTeam);
   const awayColor = getTeamColor(game.awayTeam);
   const isFinished = game.status === "FINISHED";
@@ -18,7 +18,10 @@ export function GameCard({ game }: { game: Game }) {
   const awayWin = isFinished && game.score.home < game.score.away;
 
   return (
-    <div className="rounded-xl border border-zinc-200 bg-white shadow-sm overflow-hidden dark:border-zinc-800 dark:bg-zinc-900">
+    <div
+      className={`rounded-xl border border-zinc-200 bg-white shadow-sm overflow-hidden dark:border-zinc-800 dark:bg-zinc-900${onClick ? " cursor-pointer hover:border-zinc-400 dark:hover:border-zinc-600 transition-colors" : ""}`}
+      onClick={onClick}
+    >
       {/* Status bar */}
       <div className="flex items-center justify-between px-4 py-2 bg-zinc-50 dark:bg-zinc-800/50 text-xs text-zinc-500 dark:text-zinc-400">
         <span>{game.stadium}</span>
