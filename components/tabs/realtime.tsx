@@ -261,7 +261,7 @@ export function Realtime() {
                       broadcastServices: [],
                       season: 0,
                     }}
-                    onClick={() => setSelectedGame(game)}
+                    onClick={() => setSelectedGame(game as RealtimeGame)}
                   />
                   {game.summary && (
                     <p className="text-xs text-zinc-500 dark:text-zinc-400 px-2">
