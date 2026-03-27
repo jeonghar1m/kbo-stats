@@ -5,15 +5,26 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 ## Project Overview
 
 **KBO 경기 결과** — A single-page web app for browsing Korean baseball (KBO) game results with AI-powered analysis. Three tabs:
+
 - **Tab 1**: Game results dashboard (no AI, free)
 - **Tab 2**: AI chat about game results (requires API key)
 - **Tab 3**: Real-time AI analysis with streaming (requires API key)
 
 Tech: Next.js 16 (Turbopack), React 19, TypeScript, Tailwind CSS v4, Anthropic Claude API.
 
-## Git
+## Git Commit Author
 
-커밋 시 author는 항상 `Harim Jeong <me@jeongharim.dev>` 를 사용한다.
+커밋 시 항상 아래 author 정보를 사용할 것:
+
+- **Name**: Jeong Harim
+- **Email**: me@jeongharim.dev
+
+커밋 시 항상 아래 명령어 형식을 사용할 것 (author와 committer 모두 지정):
+
+```bash
+GIT_COMMITTER_NAME="Jeong Harim" GIT_COMMITTER_EMAIL="me@jeongharim.dev" \
+  git commit --author="Jeong Harim <me@jeongharim.dev>" ...
+```
 
 ## Quick Commands
 
@@ -29,10 +40,12 @@ npm run lint       # Run ESLint
 **This is NOT the Next.js you know.** Always read `node_modules/next/dist/docs/` before writing code.
 
 ### Next.js 16 Breaking Changes
+
 - `params` and `searchParams` in route handlers/pages are **Promises** — always `await` them
 - Turbopack (default bundler) cannot handle dynamic imports with computed paths. Solution: install `kbo-game` as local dependency, use direct `import("kbo-game")`
 
 ### AI SDK v6 Breaking Changes
+
 - **Tool definitions**: Use `inputSchema` (not `parameters`)
 - **Step limiting**: Use `stopWhen: stepCountIs(3)` (not `maxSteps`)
 - **Chat streaming**: `toUIMessageStreamResponse()` (not `toDataStreamResponse()`)
@@ -72,33 +85,40 @@ See [ai-chat.tsx](components/tabs/ai-chat.tsx) and [realtime.tsx](components/tab
 ### Key Files
 
 **Core Data / Types**
+
 - `lib/kbo.ts` — KBO package wrapper, async data fetching
 - `lib/types.ts` — `Game` interface (matches kbo-game schema)
 - `lib/team-colors.ts` — 10 KBO teams → color palettes
 
 **UI Components**
+
 - `components/game-card.tsx` — Reused across all 3 tabs, displays single game with team colors
 - `components/game-card-skeleton.tsx` — Loading state
 - `components/date-picker.tsx` — Date input wrapper
 - `components/tab-container.tsx` — 3-tab switcher (useState, no URL routing)
 
 **Tab Pages**
+
 - `components/tabs/today-results.tsx` — Grid of game cards, date picker, fetches on date change
 - `components/tabs/ai-chat.tsx` — useChat, message bubbles, tool output rendering
 - `components/tabs/realtime.tsx` — useObject, manual trigger button, progressive card rendering
 
 **API Routes**
+
 - `api/chat/route.ts` — POST only, streamText with `getGames` tool
 - `api/games/route.ts` — GET (plain JSON for Tab 1), POST (streamObject for Tab 3)
 
 **Config**
+
 - `next.config.ts` — `serverExternalPackages: ["kbo-game"]` (required)
 - `tsconfig.json` — Strict mode, path alias `@/*` = project root
 
 ## Configuration
 
 ### Environment Variables
+
 Create `.env.local`:
+
 ```
 ANTHROPIC_API_KEY=sk-ant-...
 ```
@@ -106,6 +126,7 @@ ANTHROPIC_API_KEY=sk-ant-...
 Without this, Tab 2 and Tab 3 will show fallback messages. Get key from [Anthropic Console](https://console.anthropic.com).
 
 ### Tailwind CSS v4
+
 Post CSS config is auto-generated. Update styles in `app/globals.css` (uses CSS variables like `var(--font-sans)`).
 
 ## Important Implementation Notes
@@ -126,18 +147,22 @@ Post CSS config is auto-generated. Update styles in `app/globals.css` (uses CSS 
 ## Common Tasks
 
 **Add a new feature to Tab 1**
+
 - Edit `components/tabs/today-results.tsx` (client component)
 - If it needs data, call GET `/api/games?date=...` via fetch/axios
 
 **Modify AI behavior (Tab 2)**
+
 - Edit `api/chat/route.ts` — system prompt, tool definition, step limit
 - Test with suggestion buttons in `ai-chat.tsx`
 
 **Change game card layout**
+
 - Edit `components/game-card.tsx` (used by all tabs)
 - Colors come from `lib/team-colors.ts`
 
 **Debug data issues**
+
 - Check `lib/kbo.ts` — ensure `getGame()` receives Date object, not string
 - Inspect `JSON.parse(JSON.stringify(games))` in fetchGames — serializes Date fields to strings
 
