@@ -105,7 +105,7 @@ export default async function GameDetailPage({
                 >
                   {game.awayTeam}
                 </p>
-                {game.awayPitcher.trim() && (
+                {game.awayPitcher?.trim() && (
                   <p className="text-xs text-zinc-400 mt-1.5">
                     선발 {game.awayPitcher.trim()}
                   </p>
@@ -162,7 +162,7 @@ export default async function GameDetailPage({
                 >
                   {game.homeTeam}
                 </p>
-                {game.homePitcher.trim() && (
+                {game.homePitcher?.trim() && (
                   <p className="text-xs text-zinc-400 mt-1.5">
                     선발 {game.homePitcher.trim()}
                   </p>

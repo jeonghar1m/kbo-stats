@@ -55,7 +55,7 @@ export function GameCard({ game }: { game: Game }) {
               >
                 {game.awayTeam}
               </span>
-              {game.awayPitcher.trim() && (
+              {game.awayPitcher?.trim() && (
                 <span className="ml-2 text-xs text-zinc-400 dark:text-zinc-500">
                   {game.awayPitcher.trim()}
                 </span>
@@ -90,7 +90,7 @@ export function GameCard({ game }: { game: Game }) {
               >
                 {game.homeTeam}
               </span>
-              {game.homePitcher.trim() && (
+              {game.homePitcher?.trim() && (
                 <span className="ml-2 text-xs text-zinc-400 dark:text-zinc-500">
                   {game.homePitcher.trim()}
                 </span>
