@@ -11,6 +11,10 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 Tech: Next.js 16 (Turbopack), React 19, TypeScript, Tailwind CSS v4, Anthropic Claude API.
 
+## Git
+
+커밋 시 author는 항상 `Harim Jeong <me@jeongharim.dev>` 를 사용한다.
+
 ## Quick Commands
 
 ```bash
