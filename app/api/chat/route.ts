@@ -1,5 +1,5 @@
 import { anthropic } from "@ai-sdk/anthropic";
-import { streamText, tool, stepCountIs } from "ai";
+import { streamText, tool, stepCountIs, convertToModelMessages } from "ai";
 import { z } from "zod";
 import { fetchGames, createKSTDate } from "@/lib/kbo";
 
@@ -21,7 +21,7 @@ export async function POST(req: Request) {
 오늘은 ${today}입니다.
 "오늘", "어제", "내일" 등의 상대적 날짜는 오늘 기준으로 계산하세요.
 경기가 없으면 해당 날짜에 예정된 경기가 없다고 안내하세요.`,
-    messages,
+    messages: await convertToModelMessages(messages),
     tools: {
       getGames: tool({
         description:
