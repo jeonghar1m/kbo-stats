@@ -35,7 +35,11 @@ export function TodayResults({
   return (
     <div className="space-y-4">
       <div className="flex items-center gap-3">
-        <DatePicker value={date} onChange={setDate} />
+        <DatePicker
+            value={date}
+            onChange={setDate}
+            max={new Date().toLocaleDateString("sv-SE", { timeZone: "Asia/Seoul" })}
+          />
         {loading && (
           <span className="text-sm text-zinc-400">불러오는 중...</span>
         )}
