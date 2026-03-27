@@ -235,7 +235,7 @@ export default async function GameDetailPage({
             <div className="px-5 py-3.5 flex justify-between items-center">
               <span className="text-sm text-zinc-400">날짜</span>
               <span className="text-sm font-medium text-zinc-700 dark:text-zinc-300">
-                {dayjs(game.date).format("YYYY년 MM월 DD일")}
+                {dayjs(game.date).utcOffset(9).format("YYYY년 MM월 DD일")}
               </span>
             </div>
             <div className="px-5 py-3.5 flex justify-between items-center">
