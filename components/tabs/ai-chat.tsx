@@ -116,7 +116,7 @@ export function AiChat() {
       {/* Input */}
       <form
         onSubmit={handleSubmit}
-        className="sticky bottom-0 pt-4 border-t border-zinc-200 dark:border-zinc-800"
+        className="sticky bottom-0 pt-4"
       >
         <div className="flex gap-2 rounded-2xl bg-white px-3 py-2 shadow-sm dark:bg-zinc-800">
           <input
