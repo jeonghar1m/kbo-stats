@@ -20,6 +20,11 @@ export function TodayResults({
   const [loading, setLoading] = useState(false);
   const [showFutureModal, setShowFutureModal] = useState(false);
 
+  useEffect(() => {
+    document.body.style.overflow = showFutureModal ? "hidden" : "";
+    return () => { document.body.style.overflow = ""; };
+  }, [showFutureModal]);
+
   function handleDateChange(value: string) {
     if (value > todayKST) {
       setShowFutureModal(true);
