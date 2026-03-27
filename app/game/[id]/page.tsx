@@ -42,7 +42,7 @@ export default async function GameDetailPage({
       <header className="bg-zinc-900 text-white py-4 px-4 dark:bg-zinc-950">
         <div className="max-w-2xl mx-auto flex items-center gap-4">
           <Link
-            href="/"
+            href={dateStr ? `/?date=${dateStr}` : "/"}
             className="text-zinc-400 hover:text-white transition-colors text-sm flex items-center gap-1"
           >
             ← 목록

@@ -1,13 +1,21 @@
 import { fetchGames, createKSTDate } from "@/lib/kbo";
 import { TabContainer } from "@/components/tab-container";
 
-export default async function Home() {
-  const today = createKSTDate();
-  const todayStr = today.toISOString().split("T")[0];
+export default async function Home({
+  searchParams,
+}: {
+  searchParams: Promise<{ date?: string }>;
+}) {
+  const { date: dateParam } = await searchParams;
+  const todayKST = createKSTDate();
+  const todayStr = todayKST.toISOString().split("T")[0];
+
+  const requestedDate = dateParam && dateParam <= todayStr ? dateParam : todayStr;
+  const date = createKSTDate(requestedDate);
 
   let games: Awaited<ReturnType<typeof fetchGames>>;
   try {
-    games = await fetchGames(today);
+    games = await fetchGames(date);
   } catch {
     games = [];
   }
@@ -19,7 +27,7 @@ export default async function Home() {
           <h1 className="text-xl font-bold tracking-tight">⚾ KBO 경기 결과</h1>
         </div>
       </header>
-      <TabContainer initialGames={games} initialDate={todayStr} />
+      <TabContainer initialGames={games} initialDate={requestedDate} />
     </main>
   );
 }
