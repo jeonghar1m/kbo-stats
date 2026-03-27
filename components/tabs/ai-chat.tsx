@@ -116,22 +116,24 @@ export function AiChat() {
       {/* Input */}
       <form
         onSubmit={handleSubmit}
-        className="sticky bottom-0 flex gap-2 pt-4 border-t border-zinc-200 bg-white dark:border-zinc-800 dark:bg-zinc-950"
+        className="sticky bottom-0 pt-4 border-t border-zinc-200 dark:border-zinc-800"
       >
-        <input
-          value={input}
-          onChange={(e) => setInput(e.target.value)}
-          placeholder="경기 결과를 물어보세요..."
-          className="flex-1 rounded-xl border border-zinc-300 bg-white px-4 py-3 text-sm focus:border-zinc-500 focus:outline-none focus:ring-1 focus:ring-zinc-500 dark:border-zinc-700 dark:bg-zinc-800 dark:text-zinc-200"
-          disabled={isLoading}
-        />
-        <button
-          type="submit"
-          disabled={isLoading || !input.trim()}
-          className="rounded-xl bg-zinc-900 px-6 py-3 text-sm font-medium text-white hover:bg-zinc-800 disabled:opacity-50 disabled:cursor-not-allowed dark:bg-zinc-100 dark:text-zinc-900 dark:hover:bg-zinc-200 transition-colors"
-        >
-          전송
-        </button>
+        <div className="flex gap-2 rounded-2xl bg-white px-3 py-2 shadow-sm dark:bg-zinc-800">
+          <input
+            value={input}
+            onChange={(e) => setInput(e.target.value)}
+            placeholder="경기 결과를 물어보세요..."
+            className="flex-1 bg-transparent px-2 py-1 text-sm focus:outline-none text-zinc-800 placeholder-zinc-400 dark:text-zinc-200 dark:placeholder-zinc-500"
+            disabled={isLoading}
+          />
+          <button
+            type="submit"
+            disabled={isLoading || !input.trim()}
+            className="rounded-xl bg-zinc-900 px-5 py-2 text-sm font-medium text-white hover:bg-zinc-800 disabled:opacity-50 disabled:cursor-not-allowed dark:bg-zinc-100 dark:text-zinc-900 dark:hover:bg-zinc-200 transition-colors"
+          >
+            전송
+          </button>
+        </div>
       </form>
     </div>
   );
