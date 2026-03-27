@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
+import Link from "next/link";
 import type { Game } from "@/lib/types";
 import { GameCard } from "@/components/game-card";
 import { GameCardSkeleton } from "@/components/game-card-skeleton";
@@ -52,7 +53,15 @@ export function TodayResults({
           ? Array.from({ length: 5 }).map((_, i) => (
               <GameCardSkeleton key={i} />
             ))
-          : games.map((game) => <GameCard key={game.id} game={game} />)}
+          : games.map((game) => (
+              <Link
+                key={game.id}
+                href={`/game/${game.id}?date=${date}`}
+                className="block transition-transform hover:-translate-y-0.5 hover:shadow-md rounded-xl"
+              >
+                <GameCard game={game} />
+              </Link>
+            ))}
       </div>
     </div>
   );
