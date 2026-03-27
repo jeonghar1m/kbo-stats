@@ -3,6 +3,7 @@ import { notFound } from "next/navigation";
 import dayjs from "dayjs";
 import { fetchGames, createKSTDate } from "@/lib/kbo";
 import { getTeamColor } from "@/lib/team-colors";
+import { getBroadcastLabel } from "@/lib/broadcast-services";
 import type { Game } from "@/lib/types";
 
 const STATUS_LABEL: Record<Game["status"], string> = {
@@ -262,7 +263,7 @@ export default async function GameDetailPage({
               <div className="px-5 py-3.5 flex justify-between items-center">
                 <span className="text-sm text-zinc-400">중계</span>
                 <span className="text-sm font-medium text-zinc-700 dark:text-zinc-300">
-                  {game.broadcastServices.join(", ")}
+                  {game.broadcastServices.map(getBroadcastLabel).join(", ")}
                 </span>
               </div>
             )}
