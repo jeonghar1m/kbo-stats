@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { notFound } from "next/navigation";
+import dayjs from "dayjs";
 import { fetchGames, createKSTDate } from "@/lib/kbo";
 import { getTeamColor } from "@/lib/team-colors";
 import type { Game } from "@/lib/types";
@@ -234,7 +235,7 @@ export default async function GameDetailPage({
             <div className="px-5 py-3.5 flex justify-between items-center">
               <span className="text-sm text-zinc-400">날짜</span>
               <span className="text-sm font-medium text-zinc-700 dark:text-zinc-300">
-                {game.date}
+                {dayjs(game.date).format("YYYY년 MM월 DD일")}
               </span>
             </div>
             <div className="px-5 py-3.5 flex justify-between items-center">
