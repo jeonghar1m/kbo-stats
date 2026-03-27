@@ -14,9 +14,15 @@ export function TodayResults({
   initialGames: Game[];
   initialDate: string;
 }) {
+  const todayKST = new Date().toLocaleDateString("sv-SE", { timeZone: "Asia/Seoul" });
   const [date, setDate] = useState(initialDate);
   const [games, setGames] = useState(initialGames);
   const [loading, setLoading] = useState(false);
+
+  function handleDateChange(value: string) {
+    if (value > todayKST) return;
+    setDate(value);
+  }
 
   useEffect(() => {
     if (date === initialDate) {
@@ -37,8 +43,8 @@ export function TodayResults({
       <div className="flex items-center gap-3">
         <DatePicker
             value={date}
-            onChange={setDate}
-            max={new Date().toLocaleDateString("sv-SE", { timeZone: "Asia/Seoul" })}
+            onChange={handleDateChange}
+            max={todayKST}
           />
         {loading && (
           <span className="text-sm text-zinc-400">불러오는 중...</span>
