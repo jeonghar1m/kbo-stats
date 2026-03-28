@@ -56,7 +56,7 @@ function GameDetail({
       <button
         type="button"
         onClick={onBack}
-        className="flex items-center gap-1.5 text-sm text-zinc-500 hover:text-zinc-800 dark:text-zinc-400 dark:hover:text-zinc-200 transition-colors"
+        className="cursor-pointer flex items-center gap-1.5 text-sm text-zinc-500 hover:text-zinc-800 dark:text-zinc-400 dark:hover:text-zinc-200 transition-colors"
       >
         ← 목록으로
       </button>
@@ -205,7 +205,7 @@ export function Realtime() {
           type="button"
           onClick={() => submit({ date })}
           disabled={isLoading}
-          className="rounded-lg bg-zinc-900 px-4 py-1.5 text-sm font-medium text-white hover:bg-zinc-800 disabled:opacity-50 dark:bg-zinc-100 dark:text-zinc-900 dark:hover:bg-zinc-200 transition-colors"
+          className="cursor-pointer rounded-lg bg-zinc-900 px-4 py-1.5 text-sm font-medium text-white hover:bg-zinc-800 disabled:opacity-50 disabled:cursor-not-allowed dark:bg-zinc-100 dark:text-zinc-900 dark:hover:bg-zinc-200 transition-colors"
         >
           {isLoading ? "분석 중..." : "AI 분석 시작"}
         </button>
