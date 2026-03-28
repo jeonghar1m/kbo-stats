@@ -82,7 +82,7 @@ export function DatePicker({
       <button
         type="button"
         onClick={() => setOpen((o) => !o)}
-        className="rounded-lg border border-zinc-300 bg-white px-3 py-1.5 text-sm text-zinc-700 shadow-sm focus:border-zinc-500 focus:outline-none focus:ring-1 focus:ring-zinc-500 dark:border-zinc-700 dark:bg-zinc-800 dark:text-zinc-300"
+        className="cursor-pointer rounded-lg border border-zinc-300 bg-white px-3 py-1.5 text-sm text-zinc-700 shadow-sm focus:border-zinc-500 focus:outline-none focus:ring-1 focus:ring-zinc-500 dark:border-zinc-700 dark:bg-zinc-800 dark:text-zinc-300"
       >
         {displayLabel}
       </button>
@@ -94,7 +94,7 @@ export function DatePicker({
             <button
               type="button"
               onClick={prevMonth}
-              className="p-1.5 rounded-lg text-zinc-500 hover:bg-zinc-100 dark:hover:bg-zinc-800 text-lg leading-none"
+              className="cursor-pointer p-1.5 rounded-lg text-zinc-500 hover:bg-zinc-100 dark:hover:bg-zinc-800 text-lg leading-none"
             >
               ‹
             </button>
@@ -104,7 +104,7 @@ export function DatePicker({
             <button
               type="button"
               onClick={nextMonth}
-              className="p-1.5 rounded-lg text-zinc-500 hover:bg-zinc-100 dark:hover:bg-zinc-800 text-lg leading-none"
+              className="cursor-pointer p-1.5 rounded-lg text-zinc-500 hover:bg-zinc-100 dark:hover:bg-zinc-800 text-lg leading-none"
             >
               ›
             </button>
@@ -143,10 +143,10 @@ export function DatePicker({
                   onClick={() => handleSelect(day)}
                   className={`py-1.5 text-xs rounded-lg transition-colors ${
                     isSelected
-                      ? "bg-zinc-900 dark:bg-white text-white dark:text-zinc-900 font-bold"
+                      ? "cursor-pointer bg-zinc-900 dark:bg-white text-white dark:text-zinc-900 font-bold"
                       : isDisabled
                       ? "text-zinc-300 dark:text-zinc-600 cursor-not-allowed"
-                      : "text-zinc-700 dark:text-zinc-300 hover:bg-zinc-100 dark:hover:bg-zinc-800"
+                      : "cursor-pointer text-zinc-700 dark:text-zinc-300 hover:bg-zinc-100 dark:hover:bg-zinc-800"
                   }`}
                 >
                   {day}

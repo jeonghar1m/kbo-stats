@@ -36,7 +36,7 @@ export default function TabContainer({
                 key={tab.id}
                 type="button"
                 onClick={() => setActiveTab(tab.id)}
-                className={`px-4 py-3 text-sm font-medium transition-colors relative ${
+                className={`px-4 py-3 text-sm font-medium transition-colors relative cursor-pointer ${
                   activeTab === tab.id
                     ? "text-zinc-900 dark:text-white"
                     : "text-zinc-500 hover:text-zinc-700 dark:text-zinc-400 dark:hover:text-zinc-300"
