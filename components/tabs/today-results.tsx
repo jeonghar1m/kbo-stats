@@ -80,6 +80,15 @@ export function TodayResults({
             onChange={handleDateChange}
             max={todayKST}
           />
+        {date !== todayKST && (
+          <button
+            type="button"
+            onClick={() => handleDateChange(todayKST)}
+            className="rounded-lg border border-zinc-300 bg-white px-3 py-1.5 text-sm text-zinc-700 shadow-sm hover:bg-zinc-50 dark:border-zinc-700 dark:bg-zinc-800 dark:text-zinc-300 dark:hover:bg-zinc-700"
+          >
+            오늘
+          </button>
+        )}
         {loading && (
           <span className="text-sm text-zinc-400">불러오는 중...</span>
         )}
