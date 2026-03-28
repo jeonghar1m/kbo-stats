@@ -69,7 +69,7 @@ export default async function GameDetailPage({
                     <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-red-400 opacity-75" />
                     <span className="relative inline-flex rounded-full h-2 w-2 bg-red-500" />
                   </span>
-                  LIVE · {game.currentInning}회
+                  LIVE · {game.inningHalf ? `${game.inningHalf} ` : ""}{game.currentInning}회
                 </span>
               ) : (
                 <span
