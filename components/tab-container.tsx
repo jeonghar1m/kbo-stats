@@ -7,7 +7,7 @@ import { AiChat } from "@/components/tabs/ai-chat";
 import { Realtime } from "@/components/tabs/realtime";
 
 const TABS = [
-  { id: "results", label: "오늘 경기 결과" },
+  { id: "results", label: "경기 현황" },
   { id: "ai", label: "AI" },
   { id: "realtime", label: "실시간" },
 ] as const;
@@ -53,10 +53,7 @@ export function TabContainer({
       {/* Tab content */}
       <div className="max-w-4xl mx-auto px-4 py-6">
         {activeTab === "results" && (
-          <TodayResults
-            initialGames={initialGames}
-            initialDate={initialDate}
-          />
+          <TodayResults initialGames={initialGames} initialDate={initialDate} />
         )}
         {activeTab === "ai" && <AiChat />}
         {activeTab === "realtime" && <Realtime />}
