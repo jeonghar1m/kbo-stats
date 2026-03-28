@@ -1,5 +1,5 @@
 import { fetchGames, createKSTDate } from "@/lib/kbo";
-import { TabContainer } from "@/components/tab-container";
+import TabContainer from "@/components/tab-container";
 
 export default async function Home({
   searchParams,
