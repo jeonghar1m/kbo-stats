@@ -14,13 +14,15 @@ const TABS = [
 
 type TabId = (typeof TABS)[number]["id"];
 
-export function TabContainer({
-  initialGames,
-  initialDate,
-}: {
+interface TabContainerProps {
   initialGames: Game[];
   initialDate: string;
-}) {
+}
+
+export default function TabContainer({
+  initialGames,
+  initialDate,
+}: TabContainerProps) {
   const [activeTab, setActiveTab] = useState<TabId>("results");
 
   return (
