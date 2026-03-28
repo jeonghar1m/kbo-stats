@@ -13,6 +13,7 @@ export interface Game {
   status: "SCHEDULED" | "IN_PROGRESS" | "FINISHED" | "CANCELED";
   score: { home: number; away: number };
   currentInning: number;
+  inningHalf?: string;
   broadcastServices: string[];
   season: number;
 }

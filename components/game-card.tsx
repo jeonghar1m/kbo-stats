@@ -33,7 +33,7 @@ export function GameCard({ game, onClick }: { game: Game; onClick?: () => void }
             </span>
           )}
           {isLive
-            ? `${game.currentInning}회`
+            ? `${game.inningHalf ? `${game.inningHalf} ` : ""}${game.currentInning}회`
             : STATUS_LABEL[game.status]}
           {game.status === "SCHEDULED" && ` ${game.startTime}`}
         </span>
