@@ -19,6 +19,14 @@ Tech: Next.js 16 (Turbopack), React 19, TypeScript, Tailwind CSS v4, Anthropic C
 - **Name**: Jeong Harim
 - **Email**: me@jeongharim.dev
 
+커밋 메시지는 작업 내용에 맞는 prefix로 시작할 것:
+
+- `feat:` — 새 기능
+- `fix:` — 버그 수정
+- `refactor:` — 동작 변경 없는 코드 개선
+- `chore:` — 빌드/설정/의존성 등 비기능 변경
+- `docs:` — 문서 변경
+
 커밋 시 항상 아래 명령어 형식을 사용할 것 (author와 committer 모두 지정):
 
 ```bash

@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useTransition } from "react";
 import Link from "next/link";
 import type { Game } from "@/lib/types";
 import { GameCard } from "@/components/game-card";
@@ -16,8 +16,9 @@ export function TodayResults({
 }) {
   const todayKST = new Date().toLocaleDateString("sv-SE", { timeZone: "Asia/Seoul" });
   const [date, setDate] = useState(initialDate);
-  const [games, setGames] = useState(initialGames);
-  const [loading, setLoading] = useState(false);
+  const [fetchResult, setFetchResult] = useState<{ date: string; games: Game[] } | null>(null);
+  const games = fetchResult?.date === date ? fetchResult.games : initialGames;
+  const [loading, startTransition] = useTransition();
   const [showFutureModal, setShowFutureModal] = useState(false);
 
   useEffect(() => {
@@ -31,21 +32,13 @@ export function TodayResults({
       return;
     }
     setDate(value);
+    if (value === initialDate) return;
+    startTransition(async () => {
+      const res = await fetch(`/api/games?date=${value}`).catch(() => null);
+      const data = res ? await res.json().catch(() => ({})) : {};
+      setFetchResult({ date: value, games: data.games ?? [] });
+    });
   }
-
-  useEffect(() => {
-    if (date === initialDate) {
-      setGames(initialGames);
-      return;
-    }
-
-    setLoading(true);
-    fetch(`/api/games?date=${date}`)
-      .then((res) => res.json())
-      .then((data) => setGames(data.games ?? []))
-      .catch(() => setGames([]))
-      .finally(() => setLoading(false));
-  }, [date, initialDate, initialGames]);
 
   return (
     <div className="space-y-4">
