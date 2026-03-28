@@ -3,6 +3,7 @@ import { notFound } from "next/navigation";
 import dayjs from "dayjs";
 import { fetchGames, createKSTDate } from "@/lib/kbo";
 import { getTeamColor } from "@/lib/team-colors";
+import { LiveGameState } from "@/components/live-game-state";
 import type { Game } from "@/lib/types";
 
 const STATUS_LABEL: Record<Game["status"], string> = {
@@ -171,6 +172,15 @@ export default async function GameDetailPage({
             </div>
           </div>
         </div>
+
+        {/* Live game state */}
+        {isLive && (
+          <LiveGameState
+            gameId={game.id}
+            homeTeam={game.homeTeam}
+            awayTeam={game.awayTeam}
+          />
+        )}
 
         {/* Pitcher results */}
         {isFinished && (game.winPitcher.trim() || game.losePitcher.trim()) && (

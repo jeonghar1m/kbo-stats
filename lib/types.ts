@@ -17,3 +17,26 @@ export interface Game {
   broadcastServices: string[];
   season: number;
 }
+
+export interface BallCount {
+  balls: number;
+  strikes: number;
+  outs: number;
+}
+
+export interface LiveGameData {
+  available: true;
+  pitcher: string;
+  batter: string;
+  bases: { first: boolean; second: boolean; third: boolean };
+  ballCount: BallCount;
+  inning: number;
+  inningHalf: string;
+  score: { away: number; home: number };
+}
+
+export interface LiveGameUnavailable {
+  available: false;
+}
+
+export type LiveGameResponse = LiveGameData | LiveGameUnavailable;
