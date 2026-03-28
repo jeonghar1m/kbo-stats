@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
+import { Analytics } from "@vercel/analytics/next";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -30,8 +31,17 @@ export default function RootLayout({
       <body className="min-h-full flex flex-col">
         {children}
         <footer className="text-center text-sm text-gray-500 py-4">
-          &copy; {new Date().getFullYear()} <a href="https://jeongharim.dev" target="_blank" rel="noopener noreferrer" className="text-gray-500">Jeong Harim</a>
+          &copy; {new Date().getFullYear()}{" "}
+          <a
+            href="https://jeongharim.dev"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="text-gray-500"
+          >
+            Jeong Harim
+          </a>
         </footer>
+        <Analytics />
       </body>
     </html>
   );
