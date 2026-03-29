@@ -65,7 +65,11 @@ export function GameCard({ game, onClick }: { game: Game; onClick?: () => void }
               )}
             </div>
           </div>
-          <span className="text-2xl font-mono font-bold tabular-nums text-zinc-900 dark:text-white">
+          <span
+            className={`text-2xl font-mono font-bold tabular-nums ${
+              awayWin ? "text-red-500" : "text-zinc-900 dark:text-white"
+            }`}
+          >
             {game.status === "SCHEDULED" ? "-" : game.score.away}
           </span>
         </div>
@@ -94,7 +98,11 @@ export function GameCard({ game, onClick }: { game: Game; onClick?: () => void }
               )}
             </div>
           </div>
-          <span className="text-2xl font-mono font-bold tabular-nums text-zinc-900 dark:text-white">
+          <span
+            className={`text-2xl font-mono font-bold tabular-nums ${
+              homeWin ? "text-red-500" : "text-zinc-900 dark:text-white"
+            }`}
+          >
             {game.status === "SCHEDULED" ? "-" : game.score.home}
           </span>
         </div>
