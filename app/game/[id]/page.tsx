@@ -97,13 +97,7 @@ export default async function GameDetailPage({
                 >
                   원정
                 </p>
-                <p
-                  className={`text-2xl font-bold ${
-                    awayWin
-                      ? "text-zinc-900 dark:text-white"
-                      : "text-zinc-400 dark:text-zinc-500"
-                  }`}
-                >
+                <p className="text-2xl font-bold text-zinc-900 dark:text-white">
                   {game.awayTeam}
                 </p>
                 {game.awayPitcher?.trim() && (
@@ -123,9 +117,7 @@ export default async function GameDetailPage({
                   <div className="flex items-center gap-2">
                     <span
                       className={`text-5xl font-mono font-black tabular-nums ${
-                        awayWin
-                          ? "text-zinc-900 dark:text-white"
-                          : "text-zinc-300 dark:text-zinc-600"
+                        awayWin ? "text-red-500" : "text-zinc-900 dark:text-white"
                       }`}
                     >
                       {game.score.away}
@@ -135,9 +127,7 @@ export default async function GameDetailPage({
                     </span>
                     <span
                       className={`text-5xl font-mono font-black tabular-nums ${
-                        homeWin
-                          ? "text-zinc-900 dark:text-white"
-                          : "text-zinc-300 dark:text-zinc-600"
+                        homeWin ? "text-red-500" : "text-zinc-900 dark:text-white"
                       }`}
                     >
                       {game.score.home}
@@ -154,13 +144,7 @@ export default async function GameDetailPage({
                 >
                   홈
                 </p>
-                <p
-                  className={`text-2xl font-bold ${
-                    homeWin
-                      ? "text-zinc-900 dark:text-white"
-                      : "text-zinc-400 dark:text-zinc-500"
-                  }`}
-                >
+                <p className="text-2xl font-bold text-zinc-900 dark:text-white">
                   {game.homeTeam}
                 </p>
                 {game.homePitcher?.trim() && (
