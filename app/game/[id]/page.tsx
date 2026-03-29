@@ -122,7 +122,7 @@ export default async function GameDetailPage({
                     >
                       {game.score.away}
                     </span>
-                    <span className="text-2xl text-zinc-200 dark:text-zinc-700">
+                    <span className="text-2xl text-zinc-900 dark:text-white">
                       :
                     </span>
                     <span
