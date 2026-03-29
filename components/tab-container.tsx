@@ -5,9 +5,11 @@ import type { Game } from "@/lib/types";
 import { TodayResults } from "@/components/tabs/today-results";
 import { AiChat } from "@/components/tabs/ai-chat";
 import { Realtime } from "@/components/tabs/realtime";
+import { Standings } from "@/components/tabs/standings";
 
 const TABS = [
   { id: "results", label: "경기 현황" },
+  { id: "standings", label: "순위" },
   { id: "ai", label: "AI" },
   { id: "realtime", label: "실시간" },
 ] as const;
@@ -57,6 +59,7 @@ export default function TabContainer({
         {activeTab === "results" && (
           <TodayResults initialGames={initialGames} initialDate={initialDate} />
         )}
+        {activeTab === "standings" && <Standings />}
         {activeTab === "ai" && <AiChat />}
         {activeTab === "realtime" && <Realtime />}
       </div>
