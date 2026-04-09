@@ -83,7 +83,7 @@ export default async function GameDetailPage({
                   }`}
                 >
                   {isCanceled && game.cancellationReason
-                    ? `취소 · ${game.cancellationReason}`
+                    ? game.cancellationReason
                     : STATUS_LABEL[game.status]}
                 </span>
               )}
