@@ -82,7 +82,9 @@ export default async function GameDetailPage({
                       : "bg-blue-50 dark:bg-blue-950/50 text-blue-600 dark:text-blue-400"
                   }`}
                 >
-                  {STATUS_LABEL[game.status]}
+                  {isCanceled && game.cancellationReason
+                    ? game.cancellationReason
+                    : STATUS_LABEL[game.status]}
                 </span>
               )}
             </div>
@@ -257,6 +259,14 @@ export default async function GameDetailPage({
                 <span className="text-sm text-zinc-400">중계</span>
                 <span className="text-sm font-medium text-zinc-700 dark:text-zinc-300">
                   {game.broadcastServices.join(", ")}
+                </span>
+              </div>
+            )}
+            {isCanceled && game.cancellationReason && (
+              <div className="px-5 py-3.5 flex justify-between items-center">
+                <span className="text-sm text-zinc-400">취소 사유</span>
+                <span className="text-sm font-medium text-red-500">
+                  {game.cancellationReason}
                 </span>
               </div>
             )}
