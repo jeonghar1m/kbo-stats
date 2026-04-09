@@ -14,6 +14,7 @@ export interface Game {
   score: { home: number; away: number };
   currentInning: number;
   inningHalf?: string;
+  cancellationReason?: string;
   broadcastServices: string[];
   season: number;
 }

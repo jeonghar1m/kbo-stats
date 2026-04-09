@@ -7,9 +7,10 @@ function formatDateKBO(date: Date): string {
   return `${yyyy}${mm}${dd}`;
 }
 
-async function fetchInningHalfMap(
-  dateStr: string
-): Promise<Record<string, string>> {
+async function fetchKboApiData(dateStr: string): Promise<{
+  inningHalfMap: Record<string, string>;
+  cancellationReasonMap: Record<string, string>;
+}> {
   try {
     const formData = new URLSearchParams({
       leId: "1",
@@ -29,15 +30,21 @@ async function fetchInningHalfMap(
         body: formData,
       }
     );
-    if (!res.ok) return {};
+    if (!res.ok) return { inningHalfMap: {}, cancellationReasonMap: {} };
     const data = await res.json();
-    const games: Array<{ G_ID: string; GAME_TB_SC_NM: string }> =
+    const games: Array<{ G_ID: string; GAME_TB_SC_NM: string; CANCEL_SC_NM: string }> =
       data.game ?? [];
-    return Object.fromEntries(
+    const inningHalfMap = Object.fromEntries(
       games.map((g) => [g.G_ID, g.GAME_TB_SC_NM])
     );
+    const cancellationReasonMap = Object.fromEntries(
+      games
+        .filter((g) => g.CANCEL_SC_NM?.trim())
+        .map((g) => [g.G_ID, g.CANCEL_SC_NM.trim()])
+    );
+    return { inningHalfMap, cancellationReasonMap };
   } catch {
-    return {};
+    return { inningHalfMap: {}, cancellationReasonMap: {} };
   }
 }
 
@@ -45,15 +52,16 @@ export async function fetchGames(date: Date): Promise<Game[]> {
   try {
     const { getGame } = await import("kbo-game");
     const dateStr = formatDateKBO(date);
-    const [games, inningHalfMap] = await Promise.all([
+    const [games, { inningHalfMap, cancellationReasonMap }] = await Promise.all([
       getGame(date),
-      fetchInningHalfMap(dateStr),
+      fetchKboApiData(dateStr),
     ]);
     if (!games) return [];
     const serialized: Game[] = JSON.parse(JSON.stringify(games));
     return serialized.map((game) => ({
       ...game,
       inningHalf: inningHalfMap[game.id] || undefined,
+      cancellationReason: cancellationReasonMap[game.id] || undefined,
     }));
   } catch {
     return [];

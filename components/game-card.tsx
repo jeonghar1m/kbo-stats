@@ -34,6 +34,8 @@ export function GameCard({ game, onClick }: { game: Game; onClick?: () => void }
           )}
           {isLive
             ? `${game.currentInning}회${game.inningHalf ? ` ${game.inningHalf}` : ""}`
+            : game.status === "CANCELED" && game.cancellationReason
+            ? `취소 · ${game.cancellationReason}`
             : STATUS_LABEL[game.status]}
           {game.status === "SCHEDULED" && ` ${game.startTime}`}
         </span>
