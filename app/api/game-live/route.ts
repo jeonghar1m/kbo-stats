@@ -6,7 +6,7 @@ export async function GET(request: NextRequest) {
   if (!gId) {
     return NextResponse.json(
       { error: "g_id parameter required" },
-      { status: 400 }
+      { status: 400 },
     );
   }
 
@@ -29,7 +29,7 @@ export async function GET(request: NextRequest) {
           srId: "0,1,3,4,5,6,7,8,9",
           date: dateStr,
         }),
-      }
+      },
     );
 
     if (!res.ok) {
@@ -44,10 +44,11 @@ export async function GET(request: NextRequest) {
       return jsonUnavailable();
     }
 
+    const isTop = String(game.GAME_TB_SC_NM ?? "") === "초";
     const result: LiveGameData = {
       available: true,
-      pitcher: String(game.B_P_NM ?? "").trim(),
-      batter: String(game.T_P_NM ?? "").trim(),
+      pitcher: isTop ? String(game.B_P_NM ?? "").trim() : String(game.T_P_NM ?? "").trim(),
+      batter: isTop ? String(game.T_P_NM ?? "").trim() : String(game.B_P_NM ?? "").trim(),
       bases: {
         first: Number(game.B1_BAT_ORDER_NO ?? 0) > 0,
         second: Number(game.B2_BAT_ORDER_NO ?? 0) > 0,
