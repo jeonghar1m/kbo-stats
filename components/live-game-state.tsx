@@ -131,7 +131,7 @@ export function LiveGameState({
         </div>
 
         {/* Batter / Pitcher */}
-        <BatterPitcherInfo pitcher={data.pitcher} batter={data.batter} />
+        <BatterPitcherInfo pitcher={data.pitcher} batter={data.batter} awayFirst={data.inningHalf === "초"} />
 
         {/* Diamond + SBO side by side */}
         <div className="flex items-center justify-center gap-6">
