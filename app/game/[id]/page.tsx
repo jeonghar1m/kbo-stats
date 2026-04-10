@@ -4,6 +4,7 @@ import dayjs from "dayjs";
 import { fetchGames, createKSTDate } from "@/lib/kbo";
 import { getTeamColor } from "@/lib/team-colors";
 import { LiveGameState } from "@/components/live-game-state";
+import { LiveScore } from "@/components/game-live/live-score";
 import type { Game } from "@/lib/types";
 
 const STATUS_LABEL: Record<Game["status"], string> = {
@@ -34,8 +35,6 @@ export default async function GameDetailPage({
   const isFinished = game.status === "FINISHED";
   const isLive = game.status === "IN_PROGRESS";
   const isCanceled = game.status === "CANCELED";
-  const homeWin = isFinished && game.score.home > game.score.away;
-  const awayWin = isFinished && game.score.home < game.score.away;
 
   return (
     <main className="min-h-screen bg-zinc-50 dark:bg-zinc-950">
@@ -116,25 +115,12 @@ export default async function GameDetailPage({
                     VS
                   </p>
                 ) : (
-                  <div className="flex items-center gap-2">
-                    <span
-                      className={`text-5xl font-mono font-black tabular-nums ${
-                        awayWin ? "text-red-500" : "text-zinc-900 dark:text-white"
-                      }`}
-                    >
-                      {game.score.away}
-                    </span>
-                    <span className="text-2xl text-zinc-900 dark:text-white">
-                      :
-                    </span>
-                    <span
-                      className={`text-5xl font-mono font-black tabular-nums ${
-                        homeWin ? "text-red-500" : "text-zinc-900 dark:text-white"
-                      }`}
-                    >
-                      {game.score.home}
-                    </span>
-                  </div>
+                  <LiveScore
+                    gameId={game.id}
+                    initialScore={game.score}
+                    isLive={isLive}
+                    isFinished={isFinished}
+                  />
                 )}
               </div>
 
