@@ -46,8 +46,8 @@ export async function GET(request: NextRequest) {
 
     const result: LiveGameData = {
       available: true,
-      pitcher: String(game.T_P_NM ?? "").trim(),
-      batter: String(game.B_P_NM ?? "").trim(),
+      pitcher: String(game.B_P_NM ?? "").trim(),
+      batter: String(game.T_P_NM ?? "").trim(),
       bases: {
         first: Number(game.B1_BAT_ORDER_NO ?? 0) > 0,
         second: Number(game.B2_BAT_ORDER_NO ?? 0) > 0,
