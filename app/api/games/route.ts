@@ -59,6 +59,9 @@ export async function POST(req: Request) {
   const result = streamObject({
     model: google("gemma-4-31b-it"),
     schema: gameAnalysisSchema,
+    providerOptions: {
+      google: { structuredOutputs: false },
+    },
     prompt: `다음은 KBO 프로야구 경기 데이터입니다. 각 경기의 데이터를 그대로 유지하면서, 각 경기에 대한 한줄 요약과 전체 종합 요약을 작성해주세요.
 취소된 경기는 "우천 취소" 등으로 요약하고, 종료된 경기는 승패와 주요 포인트를 요약해주세요.
 

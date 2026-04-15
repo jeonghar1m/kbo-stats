@@ -1,12 +1,15 @@
 import { google } from "@ai-sdk/google";
-import { streamText, tool, stepCountIs, convertToModelMessages } from "ai";
-import { z } from "zod";
+import { streamText, convertToModelMessages } from "ai";
 import { fetchGames, createKSTDate } from "@/lib/kbo";
 
 export async function POST(req: Request) {
   const { messages } = await req.json();
 
-  const today = new Date().toLocaleDateString("ko-KR", {
+  const todayDate = createKSTDate();
+  const yesterdayDate = new Date(todayDate);
+  yesterdayDate.setDate(yesterdayDate.getDate() - 1);
+
+  const today = todayDate.toLocaleDateString("ko-KR", {
     timeZone: "Asia/Seoul",
     year: "numeric",
     month: "long",
@@ -14,31 +17,24 @@ export async function POST(req: Request) {
     weekday: "long",
   });
 
+  const [todayGames, yesterdayGames] = await Promise.all([
+    fetchGames(todayDate),
+    fetchGames(yesterdayDate),
+  ]);
+
   const result = streamText({
     model: google("gemma-4-31b-it"),
     system: `당신은 KBO 한국 프로야구 전문 AI 어시스턴트입니다.
-사용자가 경기 결과를 물어보면 getGames 도구를 사용해 데이터를 가져온 후 자연스러운 한국어로 답변해주세요.
+아래 제공된 경기 데이터를 바탕으로 자연스러운 한국어로 답변해주세요.
 오늘은 ${today}입니다.
-"오늘", "어제", "내일" 등의 상대적 날짜는 오늘 기준으로 계산하세요.
-경기가 없으면 해당 날짜에 예정된 경기가 없다고 안내하세요.`,
+경기가 없으면 해당 날짜에 예정된 경기가 없다고 안내하세요.
+
+오늘 경기 데이터:
+${todayGames.length > 0 ? JSON.stringify(todayGames, null, 2) : "오늘 경기 없음"}
+
+어제 경기 데이터:
+${yesterdayGames.length > 0 ? JSON.stringify(yesterdayGames, null, 2) : "어제 경기 없음"}`,
     messages: await convertToModelMessages(messages),
-    tools: {
-      getGames: tool({
-        description:
-          "KBO 프로야구 경기 정보를 날짜별로 가져옵니다. 날짜를 YYYY-MM-DD 형식으로 전달하세요.",
-        inputSchema: z.object({
-          date: z
-            .string()
-            .optional()
-            .describe("YYYY-MM-DD 형식의 날짜. 없으면 오늘"),
-        }),
-        execute: async ({ date }) => {
-          const d = createKSTDate(date);
-          return await fetchGames(d);
-        },
-      }),
-    },
-    stopWhen: stepCountIs(3),
   });
 
   return result.toUIMessageStreamResponse();
