@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
-import { anthropic } from "@ai-sdk/anthropic";
+import { google } from "@ai-sdk/google";
 import { streamObject } from "ai";
 import { z } from "zod";
 import { fetchGames, createKSTDate } from "@/lib/kbo";
@@ -44,7 +44,7 @@ export async function POST(req: Request) {
     return NextResponse.json({ games: [], overallSummary: "해당 날짜에 경기가 없습니다." });
   }
 
-  if (!process.env.ANTHROPIC_API_KEY || process.env.ANTHROPIC_API_KEY === "your-api-key-here") {
+  if (!process.env.GOOGLE_GENERATIVE_AI_API_KEY || process.env.GOOGLE_GENERATIVE_AI_API_KEY === "your-api-key-here") {
     return NextResponse.json({
       games: rawGames.map((g) => ({
         ...g,
@@ -57,7 +57,7 @@ export async function POST(req: Request) {
   }
 
   const result = streamObject({
-    model: anthropic("claude-sonnet-4-20250514"),
+    model: google("gemma-4-31b-it"),
     schema: gameAnalysisSchema,
     prompt: `다음은 KBO 프로야구 경기 데이터입니다. 각 경기의 데이터를 그대로 유지하면서, 각 경기에 대한 한줄 요약과 전체 종합 요약을 작성해주세요.
 취소된 경기는 "우천 취소" 등으로 요약하고, 종료된 경기는 승패와 주요 포인트를 요약해주세요.

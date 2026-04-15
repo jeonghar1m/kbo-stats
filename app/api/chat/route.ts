@@ -1,4 +1,4 @@
-import { anthropic } from "@ai-sdk/anthropic";
+import { google } from "@ai-sdk/google";
 import { streamText, tool, stepCountIs, convertToModelMessages } from "ai";
 import { z } from "zod";
 import { fetchGames, createKSTDate } from "@/lib/kbo";
@@ -15,7 +15,7 @@ export async function POST(req: Request) {
   });
 
   const result = streamText({
-    model: anthropic("claude-sonnet-4-20250514"),
+    model: google("gemma-4-31b-it"),
     system: `당신은 KBO 한국 프로야구 전문 AI 어시스턴트입니다.
 사용자가 경기 결과를 물어보면 getGames 도구를 사용해 데이터를 가져온 후 자연스러운 한국어로 답변해주세요.
 오늘은 ${today}입니다.
