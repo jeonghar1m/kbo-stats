@@ -172,11 +172,7 @@ function GameDetail({
 }
 
 function getToday() {
-  return new Date(
-    new Date().toLocaleString("en-US", { timeZone: "Asia/Seoul" })
-  )
-    .toISOString()
-    .split("T")[0];
+  return new Date().toLocaleDateString("sv-SE", { timeZone: "Asia/Seoul" });
 }
 
 export function Realtime() {
