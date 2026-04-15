@@ -180,12 +180,18 @@ function getToday() {
 }
 
 export function Realtime() {
-  const [date, setDate] = useState(getToday());
+  const todayKST = getToday();
+  const [date, setDate] = useState(todayKST);
   const [selectedGame, setSelectedGame] = useState<RealtimeGame | null>(null);
   const { object, submit, isLoading, error } = useObject({
     api: "/api/games",
     schema: gameSchema,
   });
+
+  function handleDateChange(value: string) {
+    if (value > todayKST) return;
+    setDate(value);
+  }
 
   if (selectedGame) {
     return (
@@ -200,7 +206,7 @@ export function Realtime() {
   return (
     <div className="space-y-4">
       <div className="flex items-center gap-3">
-        <DatePicker value={date} onChange={setDate} />
+        <DatePicker value={date} onChange={handleDateChange} max={todayKST} />
         <button
           type="button"
           onClick={() => submit({ date })}
