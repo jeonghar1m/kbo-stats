@@ -50,13 +50,6 @@ npm run dev
 
 http://localhost:3000 접속
 
-## 💰 비용
-
-- **Tab 1 (경기 결과)**: 무료 (kbo-game 패키지만 사용)
-- **Tab 2, 3 (AI 기능)**: 토큰 기반 종량제
-  - Claude Sonnet 4.6: 입력 $3, 출력 $15 per M tokens
-  - 일반적인 쿼리당 약 $0.01-0.025
-
 ## 📝 사용 예시
 
 ### 경기 결과 조회
