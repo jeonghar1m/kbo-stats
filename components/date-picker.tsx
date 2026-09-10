@@ -13,29 +13,26 @@ function getFirstDayOfWeek(year: number, month: number) {
 const DAYS = ["일", "월", "화", "수", "목", "금", "토"];
 const MONTHS = ["1월", "2월", "3월", "4월", "5월", "6월", "7월", "8월", "9월", "10월", "11월", "12월"];
 
-export function DatePicker({
-  value,
-  onChange,
-  max,
-}: {
+type DatePickerProps = {
   value: string;
   onChange: (date: string) => void;
   max?: string;
-}) {
+};
+
+export function DatePicker(props: DatePickerProps) {
+  return <DatePickerInner key={props.value} {...props} />;
+}
+
+function DatePickerInner({
+  value,
+  onChange,
+  max,
+}: DatePickerProps) {
   const parsed = value ? value.split("-").map(Number) : null;
   const [open, setOpen] = useState(false);
   const [viewYear, setViewYear] = useState(parsed?.[0] ?? new Date().getFullYear());
   const [viewMonth, setViewMonth] = useState(parsed ? parsed[1] - 1 : new Date().getMonth());
   const ref = useRef<HTMLDivElement>(null);
-
-  // Sync view when value changes externally
-  useEffect(() => {
-    if (value) {
-      const [y, m] = value.split("-").map(Number);
-      setViewYear(y);
-      setViewMonth(m - 1);
-    }
-  }, [value]);
 
   useEffect(() => {
     if (!open) return;
