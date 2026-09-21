@@ -28,7 +28,10 @@ export async function fetchAsianGameLive(
     const { statusCode, bytes } = await requestOfficialResult(
       `${RESULTS_API}/${game.resultsKey}`,
     );
-    if (statusCode < 200 || statusCode >= 300) return { available: false };
+    if (statusCode < 200 || statusCode >= 300) {
+      console.error(`[asian-games-live] upstream returned ${statusCode}`);
+      return { available: false };
+    }
 
     const body = bytes[0] === 0x78
       ? inflateSync(bytes).toString("utf8")
@@ -46,7 +49,11 @@ export async function fetchAsianGameLive(
       ...parsed,
       updatedAt: new Date().toISOString(),
     };
-  } catch {
+  } catch (error) {
+    console.error(
+      "[asian-games-live] upstream request failed",
+      error instanceof Error ? error.message : error,
+    );
     return { available: false };
   }
 }
