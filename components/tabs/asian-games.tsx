@@ -3,10 +3,12 @@ import { AsianGameCard } from "@/components/asian-game-card";
 import {
   ASIAN_GAMES, ASIAN_GAMES_CHECKED_AT, ASIAN_GAMES_SOURCE,
 } from "@/lib/asian-games";
+import { fetchAsianGameLive } from "@/lib/asian-games-api";
 
-export function AsianGames({ date, now }: { date?: string; now: number }) {
+export async function AsianGames({ date, now }: { date?: string; now: number }) {
   const dates = [...new Set(ASIAN_GAMES.map((game) => game.date))];
   const games = ASIAN_GAMES.filter((game) => !date || game.date === date);
+  const snapshots = await Promise.all(games.map(fetchAsianGameLive));
 
   return (
     <section className="space-y-5" aria-labelledby="asian-games-title">
@@ -28,13 +30,21 @@ export function AsianGames({ date, now }: { date?: string; now: number }) {
       </nav>
 
       <p className="text-xs leading-relaxed text-zinc-500 dark:text-zinc-400">
-        공식 경기 기록을 사용합니다. 경기 중에는 점수와 이닝, B/S/O, 주자, 투수·타자를 10초마다 갱신합니다.
+        목록은 진입 시 공식 기록을 한 번 확인합니다. 경기 상세에서는 점수와 이닝, B/S/O, 주자, 투수·타자를 10초마다 갱신합니다.
         <br />마지막 확인: {ASIAN_GAMES_CHECKED_AT} · <a href={ASIAN_GAMES_SOURCE} target="_blank" rel="noopener noreferrer" className="underline underline-offset-2">공식 일정 확인 ↗</a>
       </p>
 
       {games.length === 0 && <p className="py-12 text-center text-zinc-500">해당 날짜에 등록된 대한민국 경기가 없습니다.</p>}
       <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
-        {games.map((game) => <AsianGameCard key={game.id} game={game} now={now} />)}
+        {games.map((game, index) => (
+          <Link
+            key={game.id}
+            href={`/asian-games/${game.id}`}
+            className="block rounded-xl transition-transform hover:-translate-y-0.5 hover:shadow-md"
+          >
+            <AsianGameCard game={game} now={now} snapshot={snapshots[index]} />
+          </Link>
+        ))}
       </div>
       <p className="rounded-xl border border-dashed border-zinc-300 p-4 text-sm text-zinc-500 dark:border-zinc-700">
         이후 라운드의 한국 경기 일정은 진출 여부와 대진이 확정된 뒤 등록합니다.

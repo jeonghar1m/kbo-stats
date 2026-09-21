@@ -1,15 +1,6 @@
-"use client";
-
-import { useCallback, useEffect, useState } from "react";
-import { BaseballDiamond } from "@/components/game-live/baseball-diamond";
-import { BatterPitcherInfo } from "@/components/game-live/batter-pitcher-info";
-import { SBOCount } from "@/components/game-live/sbo-count";
 import type { AsianGame } from "@/lib/asian-games";
 import { NATIONAL_TEAMS, getAsianGameLabel } from "@/lib/asian-games";
 import type { AsianGameLiveData, AsianGameLiveResponse } from "@/lib/types";
-
-const POLL_INTERVAL = 10_000;
-const POLL_BEFORE_START = 15 * 60_000;
 
 const STATUS_LABEL: Record<AsianGameLiveData["status"], string> = {
   SCHEDULED: "경기 예정",
@@ -19,56 +10,16 @@ const STATUS_LABEL: Record<AsianGameLiveData["status"], string> = {
   POSTPONED: "연기",
 };
 
-export function AsianGameCard({ game, now }: { game: AsianGame; now: number }) {
-  const [data, setData] = useState<AsianGameLiveData | null>(null);
-  const [error, setError] = useState(false);
-  const scheduledAt = Date.parse(`${game.date}T${game.startTime}:00+09:00`);
-
-  const fetchLive = useCallback(async () => {
-    try {
-      const response = await fetch(
-        `/api/asian-games-live?game_id=${encodeURIComponent(game.id)}`,
-        { cache: "no-store" },
-      );
-      if (!response.ok) throw new Error("request failed");
-      const result = (await response.json()) as AsianGameLiveResponse;
-      if (!result.available) throw new Error("data unavailable");
-      setData(result);
-      setError(false);
-      return result.status;
-    } catch {
-      setError(true);
-      return null;
-    }
-  }, [game.id]);
-
-  useEffect(() => {
-    let timer: ReturnType<typeof setTimeout> | undefined;
-    let disposed = false;
-
-    async function poll() {
-      const status = await fetchLive();
-      if (disposed) return;
-      if (status === "FINISHED" || status === "CANCELED" || status === "POSTPONED") {
-        return;
-      }
-      timer = setTimeout(poll, POLL_INTERVAL);
-    }
-
-    const untilPolling = scheduledAt - POLL_BEFORE_START - Date.now();
-    if (untilPolling <= 0) {
-      void poll();
-    } else {
-      void fetchLive();
-      timer = setTimeout(poll, untilPolling);
-    }
-
-    return () => {
-      disposed = true;
-      if (timer) clearTimeout(timer);
-    };
-  }, [fetchLive, scheduledAt]);
-
+export function AsianGameCard({
+  game,
+  now,
+  snapshot,
+}: {
+  game: AsianGame;
+  now: number;
+  snapshot: AsianGameLiveResponse;
+}) {
+  const data = snapshot.available ? snapshot : null;
   const score = data?.score ?? game.score;
   const statusLabel = data
     ? STATUS_LABEL[data.status]
@@ -107,29 +58,7 @@ export function AsianGameCard({ game, now }: { game: AsianGame; now: number }) {
           );
         })}
 
-        {live && (
-          <div className="space-y-3 border-t border-zinc-100 pt-4 dark:border-zinc-800">
-            <div className="flex items-center justify-center gap-4 text-xs">
-              <span><b className="text-red-500">공격</b> {live.inningHalf === "초" ? NATIONAL_TEAMS[game.awayTeam] : NATIONAL_TEAMS[game.homeTeam]}</span>
-              <span className="text-zinc-300">|</span>
-              <span><b className="text-blue-500">수비</b> {live.inningHalf === "초" ? NATIONAL_TEAMS[game.homeTeam] : NATIONAL_TEAMS[game.awayTeam]}</span>
-            </div>
-            <BatterPitcherInfo pitcher={live.pitcher} batter={live.batter} awayFirst={live.inningHalf === "초"} />
-            <div className="flex items-center justify-center gap-6">
-              <BaseballDiamond bases={live.bases} />
-              <SBOCount ballCount={live.ballCount} />
-            </div>
-            <p className="text-center text-[11px] text-zinc-400">공식 기록 · 10초마다 자동 갱신</p>
-          </div>
-        )}
-
         <p className="text-xs text-zinc-500">{game.round} · {game.stadium}</p>
-        {error && <p className="text-xs text-amber-600 dark:text-amber-400">실시간 기록을 일시적으로 불러오지 못했습니다.</p>}
-        {data?.updatedAt && !error && (
-          <p className="text-[11px] text-zinc-400">
-            최근 확인 {new Date(data.updatedAt).toLocaleTimeString("ko-KR", { timeZone: "Asia/Seoul", hour: "2-digit", minute: "2-digit", second: "2-digit" })}
-          </p>
-        )}
       </div>
     </article>
   );
