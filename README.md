@@ -73,9 +73,10 @@ MIT
 경기 현황 상단에서 **아시안게임 · 대한민국**을 선택하면 한국 경기의 전체 일정과 날짜별 일정·결과를 볼 수 있습니다. 직접 주소: `/?competition=asian-games`.
 
 - 초기 데이터는 대회 조직위원회의 [2026-09-11 정정 공지](https://www.aichi-nagoya2026.org/ja/news-2050/) 기준 조별리그 3경기이며, 2026-09-21 확인했습니다. 일본과 한국 모두 UTC+9입니다.
-- **수동 갱신 방식입니다.** 자동 결과 수집 및 실시간 중계는 포함하지 않습니다.
-- `lib/asian-games.ts`의 `ASIAN_GAMES`에서 공식 결과를 확인한 경기만 `status: "FINISHED"`, `score: { home, away }`, `resultSource: "공식 결과 URL"`로 갱신하고 `ASIAN_GAMES_CHECKED_AT`도 갱신합니다. 변경 후 배포가 필요합니다.
-- 미등록 점수는 `null`로 유지합니다. 시작 시각이 지났어도 진행/종료로 추정하지 않고 **결과 미등록**을 표시합니다. 취소·연기는 각각 `CANCELED` / `POSTPONED`와 `score: null`로 등록합니다.
+- 경기 시작 15분 전부터 대회 조직위원회의 [공식 결과 서비스](https://results.asiangames2026.org/#/discipline/BBL/schedule)를 10초마다 확인합니다. 경기 종료·취소·연기가 확인되면 자동 갱신을 멈춥니다.
+- 경기 중에는 점수, 이닝과 초·말, 볼·스트라이크·아웃카운트, 1~3루 주자, 현재 투수·타자를 표시합니다. 공식 데이터가 일시적으로 누락되면 마지막 정상 데이터를 유지하면서 오류 안내를 표시합니다.
+- 브라우저는 `/api/asian-games-live`만 호출하며, 서버가 등록된 경기 ID를 검증한 뒤 공식 응답을 공통 UI 형식으로 변환합니다. 응답은 캐시하지 않습니다.
+- 시작 전 점수는 `null`로 유지합니다. 경기 상태는 시각으로 추정하지 않고 공식 응답을 따릅니다.
 - 이후 라운드는 한국의 진출과 대진이 공식 확정된 경우에만 추가합니다. 기존 KBO 상세·실시간 API에 국제대회 경기 ID를 전달하지 않습니다.
 
-검증: Node.js 22.6+에서 `node --experimental-strip-types --test tests/asian-games.test.mjs`로 한국시간 경계, 미등록 점수, 홈·원정 승패, 취소·연기를 검사할 수 있습니다.
+검증: Node.js 22.6+에서 `node --experimental-strip-types --test tests/asian-games.test.mjs`로 한국시간 경계, 홈·원정 승패, 공식 실시간 필드 변환과 종료 상태를 검사할 수 있습니다.

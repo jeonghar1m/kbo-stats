@@ -23,6 +23,7 @@ export type AsianGame = {
   round: string;
   homeTeam: Team;
   awayTeam: Team;
+  resultsKey: string;
 } & Result;
 
 // Curated data: update only after checking the official schedule/results.
@@ -31,17 +32,20 @@ export const ASIAN_GAMES: readonly AsianGame[] = [
   {
     id: "AG2026-BBL03", date: "2026-09-21", startTime: "18:30",
     stadium: "오카자키 중앙종합공원 야구장", round: "조별리그 B조",
-    awayTeam: "TPE", homeTeam: "KOR", status: "SCHEDULED", score: null,
+    awayTeam: "KOR", homeTeam: "TPE", status: "SCHEDULED", score: null,
+    resultsKey: "M.TEAM9-------------.GPB-.000200--",
   },
   {
     id: "AG2026-BBL08", date: "2026-09-22", startTime: "18:30",
     stadium: "도요하시 시민구장", round: "조별리그 B조",
-    awayTeam: "KOR", homeTeam: "HKG", status: "SCHEDULED", score: null,
+    awayTeam: "HKG", homeTeam: "KOR", status: "SCHEDULED", score: null,
+    resultsKey: "M.TEAM9-------------.GPB-.000400--",
   },
   {
     id: "AG2026-BBL09", date: "2026-09-23", startTime: "12:00",
     stadium: "오카자키 중앙종합공원 야구장", round: "조별리그 B조",
-    awayTeam: "THA", homeTeam: "KOR", status: "SCHEDULED", score: null,
+    awayTeam: "KOR", homeTeam: "THA", status: "SCHEDULED", score: null,
+    resultsKey: "M.TEAM9-------------.GPB-.000500--",
   },
 ];
 
