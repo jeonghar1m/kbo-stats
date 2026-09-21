@@ -17,8 +17,15 @@ export async function fetchAsianGameLive(
   try {
     const response = await fetch(`${RESULTS_API}/${game.resultsKey}`, {
       cache: "no-store",
-      signal: AbortSignal.timeout(8_000),
-      headers: { Accept: "application/json, text/plain, */*" },
+      signal: AbortSignal.timeout(15_000),
+      headers: {
+        Accept: "application/json, text/plain, */*",
+        "Accept-Encoding": "identity",
+        Origin: "https://results.asiangames2026.org",
+        Referer: "https://results.asiangames2026.org/",
+        "User-Agent":
+          "Mozilla/5.0 (compatible; KBOStats/1.0; +https://kbo.jeongharim.dev)",
+      },
     });
     if (!response.ok) return { available: false };
 
