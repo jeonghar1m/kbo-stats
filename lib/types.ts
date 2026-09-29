@@ -41,21 +41,3 @@ export interface LiveGameUnavailable {
 }
 
 export type LiveGameResponse = LiveGameData | LiveGameUnavailable;
-
-export type AsianGameLiveStatus =
-  | "SCHEDULED"
-  | "IN_PROGRESS"
-  | "FINISHED"
-  | "CANCELED"
-  | "POSTPONED";
-
-export interface AsianGameLiveData {
-  available: true;
-  status: AsianGameLiveStatus;
-  statusLabel: string;
-  score: { away: number; home: number } | null;
-  live: LiveGameData | null;
-  updatedAt: string;
-}
-
-export type AsianGameLiveResponse = AsianGameLiveData | LiveGameUnavailable;
