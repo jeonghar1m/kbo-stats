@@ -10,7 +10,7 @@ export default async function Home({
   const todayKST = createKSTDate();
   const todayStr = todayKST.toISOString().split("T")[0];
 
-  const requestedDate = dateParam && dateParam <= todayStr ? dateParam : todayStr;
+  const requestedDate = dateParam || todayStr;
   const date = createKSTDate(requestedDate);
 
   let games: Awaited<ReturnType<typeof fetchGames>>;
