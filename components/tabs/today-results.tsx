@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect, useTransition } from "react";
+import { useState, useTransition } from "react";
 import Link from "next/link";
 import type { Game } from "@/lib/types";
 import { GameCard } from "@/components/game-card";
@@ -19,18 +19,8 @@ export function TodayResults({
   const [fetchResult, setFetchResult] = useState<{ date: string; games: Game[] } | null>(null);
   const games = fetchResult?.date === date ? fetchResult.games : initialGames;
   const [loading, startTransition] = useTransition();
-  const [showFutureModal, setShowFutureModal] = useState(false);
-
-  useEffect(() => {
-    document.body.style.overflow = showFutureModal ? "hidden" : "";
-    return () => { document.body.style.overflow = ""; };
-  }, [showFutureModal]);
 
   function handleDateChange(value: string) {
-    if (value > todayKST) {
-      setShowFutureModal(true);
-      return;
-    }
     setDate(value);
     if (value === initialDate) return;
     startTransition(async () => {
@@ -42,37 +32,8 @@ export function TodayResults({
 
   return (
     <div className="space-y-4">
-      {showFutureModal && (
-        <div
-          className="fixed inset-0 z-50 flex items-center justify-center bg-black/40"
-          onClick={() => setShowFutureModal(false)}
-        >
-          <div
-            className="mx-4 rounded-2xl bg-white dark:bg-zinc-900 p-6 shadow-xl max-w-xs w-full text-center"
-            onClick={(e) => e.stopPropagation()}
-          >
-            <p className="text-2xl mb-2">⚾</p>
-            <p className="font-semibold text-zinc-800 dark:text-zinc-100 mb-1">
-              미래 날짜는 선택할 수 없어요
-            </p>
-            <p className="text-sm text-zinc-500 dark:text-zinc-400 mb-5">
-              오늘({todayKST}) 이전 날짜를 선택해 주세요.
-            </p>
-            <button
-              onClick={() => setShowFutureModal(false)}
-              className="w-full cursor-pointer rounded-xl bg-zinc-800 dark:bg-zinc-700 py-2 text-sm font-medium text-white hover:bg-zinc-700 dark:hover:bg-zinc-600"
-            >
-              확인
-            </button>
-          </div>
-        </div>
-      )}
       <div className="flex items-center gap-3">
-        <DatePicker
-            value={date}
-            onChange={handleDateChange}
-            max={todayKST}
-          />
+        <DatePicker value={date} onChange={handleDateChange} />
         <button
           type="button"
           disabled={date === todayKST}
